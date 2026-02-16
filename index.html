@@ -2,14 +2,13 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>TERRANZA - Donde la tierra se vuelve café</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-
         :root {
             --black: #0D0D0D;
             --dark-brown: #1A0F0A;
@@ -31,6 +30,7 @@
 
         html {
             scroll-behavior: smooth;
+            font-size: 16px;
         }
 
         body {
@@ -41,34 +41,43 @@
             line-height: 1.6;
         }
 
-        /* Custom Cursor */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--coffee);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: all 0.15s ease;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-        }
-
+        /* Custom Cursor - Solo Desktop */
+        .cursor,
         .cursor-follower {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--accent);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: all 0.3s ease;
-            transform: translate(-50%, -50%);
-            opacity: 0.5;
+            display: none;
         }
 
-        /* Loading Screen */
+        @media (min-width: 1024px) {
+            .cursor {
+                width: 20px;
+                height: 20px;
+                border: 2px solid var(--coffee);
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 9999;
+                transition: all 0.15s ease;
+                transform: translate(-50%, -50%);
+                mix-blend-mode: difference;
+                display: block;
+            }
+
+            .cursor-follower {
+                width: 40px;
+                height: 40px;
+                border: 1px solid var(--accent);
+                border-radius: 50%;
+                position: fixed;
+                pointer-events: none;
+                z-index: 9998;
+                transition: all 0.3s ease;
+                transform: translate(-50%, -50%);
+                opacity: 0.5;
+                display: block;
+            }
+        }
+
+        /* Loading Screen - Mejorado para móvil */
         .loading-screen {
             position: fixed;
             inset: 0;
@@ -80,6 +89,7 @@
             justify-content: center;
             transition: opacity 1s ease, visibility 1s ease;
             animation: fadeInBg 1.5s ease;
+            padding: 1rem;
         }
 
         @keyframes fadeInBg {
@@ -97,8 +107,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2rem;
+            gap: 1.5rem;
             animation: fadeInScale 1.2s ease forwards;
+            width: 100%;
+            max-width: 500px;
         }
 
         @keyframes fadeInScale {
@@ -113,8 +125,9 @@
         }
 
         .loading-logo-image {
-            width: 500px;
-            height: 500px;
+            width: 100%;
+            max-width: 300px;
+            height: auto;
             object-fit: contain;
             filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.2));
             animation: pulse 2s ease-in-out infinite;
@@ -126,7 +139,7 @@
                 filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.2));
             }
             50% { 
-                transform: scale(1.08) rotate(2deg);
+                transform: scale(1.05) rotate(2deg);
                 filter: drop-shadow(0 15px 50px rgba(0, 0, 0, 0.3));
             }
         }
@@ -135,6 +148,7 @@
             text-align: center;
             animation: fadeInUp 1.2s ease forwards 2s;
             opacity: 0;
+            width: 100%;
         }
 
         @keyframes fadeInUp {
@@ -150,20 +164,20 @@
 
         .loading-brand-name {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 5rem;
+            font-size: clamp(2rem, 8vw, 5rem);
             color: var(--coffee);
             font-weight: 400;
             font-style: italic;
-            letter-spacing: 8px;
+            letter-spacing: 0.15em;
             margin-bottom: 0.5rem;
             text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .loading-tagline {
             font-family: 'Work Sans', sans-serif;
-            font-size: 1.2rem;
+            font-size: clamp(0.7rem, 2.5vw, 1.2rem);
             color: var(--warm-brown);
-            letter-spacing: 4px;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             font-weight: 300;
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.05);
@@ -172,8 +186,9 @@
         }
 
         .loading-progress {
-            margin-top: 3rem;
-            width: 300px;
+            margin-top: 2rem;
+            width: 90%;
+            max-width: 300px;
             height: 2px;
             background: rgba(139, 90, 60, 0.2);
             border-radius: 2px;
@@ -198,71 +213,20 @@
             to { width: 100%; }
         }
 
-        /* Responsive Loading Screen */
-        @media (max-width: 968px) {
-            .loading-logo-image {
-                width: 400px;
-                height: 400px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .loading-logo-image {
-                width: 300px;
-                height: 300px;
-            }
-
-            .loading-brand-name {
-                font-size: 3.5rem;
-                letter-spacing: 4px;
-            }
-
-            .loading-tagline {
-                font-size: 0.9rem;
-                letter-spacing: 2px;
-            }
-
-            .loading-progress {
-                width: 250px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .loading-logo-image {
-                width: 250px;
-                height: 250px;
-            }
-
-            .loading-brand-name {
-                font-size: 2.5rem;
-                letter-spacing: 3px;
-            }
-
-            .loading-tagline {
-                font-size: 0.75rem;
-                letter-spacing: 1.5px;
-            }
-
-            .loading-progress {
-                width: 200px;
-                margin-top: 2rem;
-            }
-        }
-
-        /* Navigation */
+        /* Navigation - Optimizada para móvil */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 2rem 5%;
+            padding: 1rem 5%;
             z-index: 1000;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(20px);
         }
 
         nav.scrolled {
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 1rem 5%;
+            padding: 0.75rem 5%;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
@@ -277,14 +241,15 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
             cursor: pointer;
             transition: all 0.3s;
             position: relative;
+            z-index: 1001;
         }
 
         .logo-image {
-            height: 100px;
+            height: 50px;
             width: auto;
             object-fit: contain;
             transition: all 0.3s;
@@ -296,38 +261,15 @@
 
         .logo-text {
             font-family: 'Bebas Neue', cursive;
-            font-size: 2.5rem;
-            letter-spacing: 4px;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            letter-spacing: 0.15em;
             color: var(--white);
             transition: all 0.3s;
         }
 
-        nav.scrolled .logo-text {
-            font-size: 2rem;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.4s;
-        }
-
-        .logo:hover::after {
-            width: 100%;
-        }
-
-        .logo:hover .logo-image {
-            transform: scale(1.05);
-        }
-
         .nav-menu {
             display: flex;
-            gap: 3rem;
+            gap: 2rem;
             list-style: none;
         }
 
@@ -336,7 +278,7 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             position: relative;
             transition: color 0.3s;
             text-transform: uppercase;
@@ -364,7 +306,7 @@
 
         .nav-actions {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             align-items: center;
         }
 
@@ -401,20 +343,28 @@
             font-size: 1.8rem;
             cursor: pointer;
             transition: color 0.3s;
+            z-index: 1001;
         }
 
         .menu-toggle:hover {
             color: var(--accent);
         }
 
-        /* Hero Section */
+        /* Hero Section - Totalmente responsive */
         .hero {
+            min-height: 100vh;
             height: 100vh;
             position: relative;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .hero.show {
+            opacity: 1;
         }
 
         .hero-bg {
@@ -458,63 +408,57 @@
             z-index: 2;
             text-align: center;
             max-width: 1200px;
-            padding: 0 2rem;
+            padding: 0 5%;
+            width: 100%;
         }
 
         .hero-title {
             font-family: 'Bebas Neue', cursive;
-            font-size: 10rem;
+            font-size: clamp(3rem, 12vw, 10rem);
             color: var(--white);
-            letter-spacing: 15px;
+            letter-spacing: 0.15em;
             line-height: 0.9;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             opacity: 0;
             animation: fadeInUp 1.2s ease forwards 0.3s;
         }
 
         .hero-subtitle {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
+            font-size: clamp(1.2rem, 4vw, 2.5rem);
             color: var(--accent);
             font-style: italic;
             font-weight: 300;
-            letter-spacing: 3px;
-            margin-bottom: 3rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
             opacity: 0;
             animation: fadeInUp 1.2s ease forwards 0.6s;
         }
 
         .hero-description {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
             color: var(--cream);
             max-width: 700px;
-            margin: 0 auto 3rem;
+            margin: 0 auto 2.5rem;
             line-height: 1.8;
             opacity: 0;
             animation: fadeInUp 1.2s ease forwards 0.9s;
         }
 
         .hero-cta {
-            display: inline-flex;
-            gap: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
             opacity: 0;
             animation: fadeInUp 1.2s ease forwards 1.2s;
         }
-        .hero {
-    opacity: 0;
-    transition: opacity 0.8s ease;
-}
-
-.hero.show {
-    opacity: 1;
-}
-
 
         .btn {
-            padding: 1.2rem 3.5rem;
-            font-size: 1rem;
+            padding: 1rem 2.5rem;
+            font-size: clamp(0.85rem, 2vw, 1rem);
             font-weight: 600;
-            letter-spacing: 2px;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             text-decoration: none;
             border: none;
@@ -522,6 +466,7 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            white-space: nowrap;
         }
 
         .btn-primary {
@@ -566,7 +511,7 @@
 
         .scroll-indicator {
             position: absolute;
-            bottom: 3rem;
+            bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
             z-index: 2;
@@ -584,11 +529,11 @@
             font-size: 2rem;
         }
 
-        /* Featured Banner */
+        /* Featured Banner - Responsive */
         .featured-banner {
             background: var(--black);
             color: var(--white);
-            padding: 1.5rem 0;
+            padding: 1rem 0;
             overflow: hidden;
         }
 
@@ -605,9 +550,9 @@
 
         .marquee span {
             font-family: 'Bebas Neue', cursive;
-            font-size: 1.5rem;
-            letter-spacing: 3px;
-            padding: 0 3rem;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            letter-spacing: 0.1em;
+            padding: 0 2rem;
             display: inline-flex;
             align-items: center;
             gap: 1rem;
@@ -618,15 +563,15 @@
             color: var(--accent);
         }
 
-        /* Section Styles */
+        /* Section Styles - Responsive */
         section {
-            padding: 8rem 5%;
+            padding: clamp(4rem, 10vw, 8rem) 5%;
             position: relative;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 5rem;
+            margin-bottom: clamp(3rem, 8vw, 5rem);
             opacity: 0;
             transform: translateY(40px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -638,8 +583,8 @@
         }
 
         .section-tag {
-            font-size: 0.9rem;
-            letter-spacing: 3px;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             color: var(--accent);
             font-weight: 600;
@@ -649,22 +594,22 @@
 
         .section-title {
             font-family: 'Bebas Neue', cursive;
-            font-size: 5rem;
-            letter-spacing: 5px;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            letter-spacing: 0.1em;
             margin-bottom: 1.5rem;
             color: var(--black);
-            line-height: 1;
+            line-height: 1.1;
         }
 
         .section-description {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             color: var(--warm-brown);
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.8;
         }
 
-        /* Story Section */
+        /* Story Section - Grid responsive mejorado */
         .story-section {
             background: var(--cream);
             overflow: hidden;
@@ -674,14 +619,15 @@
             max-width: 1600px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
+            grid-template-columns: 1fr;
+            gap: 3rem;
             align-items: center;
         }
 
         .story-images {
             position: relative;
-            height: 700px;
+            height: 400px;
+            width: 100%;
         }
 
         .story-image {
@@ -698,8 +644,8 @@
         }
 
         .story-image:nth-child(1) {
-            width: 60%;
-            height: 70%;
+            width: 65%;
+            height: 75%;
             top: 0;
             left: 0;
             transition-delay: 0.1s;
@@ -707,24 +653,18 @@
 
         .story-image:nth-child(2) {
             width: 55%;
-            height: 60%;
+            height: 65%;
             bottom: 0;
             right: 0;
             transition-delay: 0.3s;
         }
 
-        .story-image.visible:nth-child(1) {
-            transform: translateY(0);
-        }
-
+        .story-image.visible:nth-child(1),
         .story-image.visible:nth-child(2) {
             transform: translateY(0);
         }
 
-        .story-image:not(.visible):nth-child(1) {
-            transform: translateY(50px);
-        }
-
+        .story-image:not(.visible):nth-child(1),
         .story-image:not(.visible):nth-child(2) {
             transform: translateY(50px);
         }
@@ -742,27 +682,27 @@
 
         .story-content {
             opacity: 0;
-            transform: translateX(50px);
+            transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .story-content.visible {
             opacity: 1;
-            transform: translateX(0);
+            transform: translateY(0);
         }
 
         .story-content h3 {
             font-family: 'Bebas Neue', cursive;
-            font-size: 3.5rem;
-            letter-spacing: 3px;
-            margin-bottom: 2rem;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
             color: var(--black);
             line-height: 1.1;
         }
 
         .story-content p {
-            font-size: 1.15rem;
-            line-height: 2;
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            line-height: 1.9;
             color: var(--coffee);
             margin-bottom: 1.5rem;
         }
@@ -774,14 +714,14 @@
 
         .story-stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
 
         .stat {
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
             background: white;
             border-radius: 8px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
@@ -795,20 +735,20 @@
 
         .stat-number {
             font-family: 'Bebas Neue', cursive;
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
             color: var(--accent);
             line-height: 1;
             margin-bottom: 0.5rem;
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
             color: var(--warm-brown);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
         }
 
-        /* Products Section */
+        /* Products Section - Grid totalmente responsive */
         .products-section {
             background: var(--white);
         }
@@ -817,8 +757,8 @@
             max-width: 1600px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
         }
 
         .product-card {
@@ -842,7 +782,7 @@
 
         .product-image-wrapper {
             position: relative;
-            height: 400px;
+            height: 350px;
             overflow: hidden;
             background: var(--warm-brown);
         }
@@ -862,14 +802,14 @@
 
         .product-badge {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: var(--accent);
             color: var(--black);
-            padding: 0.5rem 1.2rem;
-            font-size: 0.8rem;
+            padding: 0.4rem 1rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             border-radius: 4px;
             animation: slideInRight 0.6s ease;
@@ -894,14 +834,15 @@
             opacity: 0;
             background: var(--black);
             color: var(--white);
-            padding: 1rem 2.5rem;
+            padding: 0.9rem 2rem;
             border: none;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.4s;
             white-space: nowrap;
+            font-size: 0.85rem;
         }
 
         .product-card:hover .quick-add {
@@ -915,34 +856,34 @@
         }
 
         .product-info {
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .product-category {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 0.1em;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
 
         .product-name {
             font-family: 'Bebas Neue', cursive;
-            font-size: 2rem;
-            letter-spacing: 2px;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            letter-spacing: 0.08em;
             margin-bottom: 0.5rem;
             color: var(--black);
         }
 
         .product-origin {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--warm-brown);
             margin-bottom: 1rem;
         }
 
         .product-description {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.7;
             color: var(--coffee);
             margin-bottom: 1.5rem;
@@ -956,8 +897,8 @@
 
         .product-price {
             font-family: 'Bebas Neue', cursive;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
+            font-size: clamp(1.8rem, 4vw, 2.2rem);
+            letter-spacing: 0.05em;
             color: var(--black);
         }
 
@@ -968,13 +909,14 @@
 
         .product-rating i {
             color: var(--accent);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* Video Section */
+        /* Video Section - Altura adaptativa */
         .video-section {
             padding: 0;
-            height: 80vh;
+            height: 60vh;
+            min-height: 400px;
             position: relative;
             overflow: hidden;
         }
@@ -1004,14 +946,14 @@
             text-align: center;
             color: var(--white);
             max-width: 800px;
-            padding: 0 2rem;
+            padding: 0 5%;
         }
 
         .video-content h2 {
             font-family: 'Bebas Neue', cursive;
-            font-size: 5rem;
-            letter-spacing: 5px;
-            margin-bottom: 2rem;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
             opacity: 0;
             transform: scale(0.8);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1023,7 +965,7 @@
         }
 
         .video-content p {
-            font-size: 1.3rem;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
             line-height: 1.8;
             opacity: 0;
             transform: translateY(30px);
@@ -1037,7 +979,8 @@
 
         /* Parallax Section */
         .parallax-section {
-            height: 60vh;
+            height: 50vh;
+            min-height: 400px;
             background-image: url('https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1600');
             background-size: cover;
             background-position: center;
@@ -1060,54 +1003,55 @@
             text-align: center;
             color: var(--white);
             max-width: 900px;
-            padding: 0 2rem;
+            padding: 0 5%;
         }
 
         .parallax-content h2 {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 4rem;
+            font-size: clamp(1.8rem, 5vw, 4rem);
             font-style: italic;
             font-weight: 300;
-            letter-spacing: 2px;
-            line-height: 1.3;
+            letter-spacing: 0.05em;
+            line-height: 1.4;
         }
 
-        /* Newsletter */
+        /* Newsletter - Formulario responsive */
         .newsletter-section {
             background: var(--black);
             color: var(--white);
             text-align: center;
-            padding: 6rem 5%;
+            padding: clamp(4rem, 8vw, 6rem) 5%;
         }
 
         .newsletter-section h2 {
             font-family: 'Bebas Neue', cursive;
-            font-size: 4rem;
-            letter-spacing: 4px;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            letter-spacing: 0.1em;
             margin-bottom: 1.5rem;
         }
 
         .newsletter-section p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             color: var(--cream);
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         .newsletter-form {
             max-width: 600px;
             margin: 0 auto;
             display: flex;
+            flex-direction: column;
             gap: 1rem;
         }
 
         .newsletter-form input {
-            flex: 1;
-            padding: 1.2rem 2rem;
+            padding: 1.1rem 1.5rem;
             border: 2px solid var(--warm-brown);
             background: transparent;
             color: var(--white);
             font-size: 1rem;
             transition: all 0.3s;
+            width: 100%;
         }
 
         .newsletter-form input::placeholder {
@@ -1120,15 +1064,16 @@
         }
 
         .newsletter-form button {
-            padding: 1.2rem 3rem;
+            padding: 1.1rem 2.5rem;
             background: var(--accent);
             color: var(--black);
             border: none;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.3s;
+            width: 100%;
         }
 
         .newsletter-form button:hover {
@@ -1136,26 +1081,26 @@
             transform: translateY(-2px);
         }
 
-        /* Footer */
+        /* Footer - Grid responsive */
         footer {
             background: var(--dark-brown);
             color: var(--cream);
-            padding: 5rem 5% 2rem;
+            padding: clamp(3rem, 8vw, 5rem) 5% 2rem;
         }
 
         .footer-content {
             max-width: 1600px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 4rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
             margin-bottom: 3rem;
         }
 
         .footer-brand h3 {
             font-family: 'Bebas Neue', cursive;
-            font-size: 2.5rem;
-            letter-spacing: 3px;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            letter-spacing: 0.12em;
             margin-bottom: 1.5rem;
             color: var(--accent);
         }
@@ -1164,11 +1109,13 @@
             line-height: 1.8;
             margin-bottom: 2rem;
             opacity: 0.9;
+            font-size: 0.95rem;
         }
 
         .social-links {
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .social-links a {
@@ -1191,9 +1138,9 @@
         }
 
         .footer-links h4 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-bottom: 1.5rem;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             color: var(--accent);
         }
@@ -1211,6 +1158,7 @@
             text-decoration: none;
             opacity: 0.8;
             transition: all 0.3s;
+            font-size: 0.9rem;
         }
 
         .footer-links a:hover {
@@ -1224,20 +1172,65 @@
             padding-top: 2rem;
             border-top: 1px solid rgba(245, 245, 240, 0.1);
             opacity: 0.7;
+            font-size: 0.9rem;
         }
 
-        /* Responsive */
-        @media (max-width: 1200px) {
+        /* Responsive Design Breakpoints */
+        
+        /* Tablets y Desktop pequeño */
+        @media (min-width: 768px) {
+            .story-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 4rem;
+            }
+
+            .story-images {
+                height: 500px;
+            }
+
+            .story-content {
+                transform: translateX(50px);
+            }
+
+            .newsletter-form {
+                flex-direction: row;
+            }
+
+            .newsletter-form input {
+                flex: 1;
+            }
+
+            .newsletter-form button {
+                width: auto;
+            }
+
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+        }
 
-            .hero-title {
-                font-size: 7rem;
+        /* Desktop */
+        @media (min-width: 1024px) {
+            .story-images {
+                height: 700px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 3rem;
+            }
+
+            .parallax-section {
+                background-attachment: fixed;
             }
         }
 
-        @media (max-width: 968px) {
+        /* Mobile - Mejoras específicas */
+        @media (max-width: 767px) {
+            html {
+                font-size: 14px;
+            }
+
             .menu-toggle {
                 display: block;
             }
@@ -1247,124 +1240,127 @@
                 top: 0;
                 right: -100%;
                 height: 100vh;
-                width: 100%;
-                max-width: 400px;
+                width: 85%;
+                max-width: 350px;
                 background: var(--dark-brown);
                 flex-direction: column;
-                padding: 6rem 3rem;
-                gap: 2rem;
+                padding: 5rem 2rem;
+                gap: 1.5rem;
                 transition: right 0.4s;
                 box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+                overflow-y: auto;
             }
 
             .nav-menu.active {
                 right: 0;
             }
 
-            .logo-image {
-                height: 40px;
+            .nav-menu a {
+                font-size: 1.1rem;
+                padding: 0.5rem 0;
             }
 
-            .logo-text {
-                font-size: 2rem;
+            .hero {
+                min-height: 100svh;
             }
 
-            nav.scrolled .logo-image {
-                height: 35px;
-            }
-
-            nav.scrolled .logo-text {
-                font-size: 1.8rem;
-            }
-
-            .story-container {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-            }
-
-            .story-images {
-                height: 500px;
-                order: -1;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .hero-title {
-                font-size: 5rem;
-            }
-
-            .section-title {
-                font-size: 3.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-title {
-                font-size: 4rem;
-                letter-spacing: 8px;
-            }
-
-            .hero-subtitle {
-                font-size: 1.8rem;
-            }
-
-            .section-title {
-                font-size: 2.8rem;
-            }
-
-            .story-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-
-            .newsletter-form {
+            .hero-cta {
                 flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
             }
 
             .parallax-section {
                 background-attachment: scroll;
             }
 
-            .cursor,
-            .cursor-follower {
-                display: none;
+            .story-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .product-image-wrapper {
+                height: 300px;
+            }
+
+            .video-section {
+                height: 50vh;
+            }
+
+            /* Evitar scroll horizontal */
+            body {
+                overflow-x: hidden;
+            }
+
+            /* Mejorar touch targets */
+            .btn,
+            .quick-add,
+            .cart-icon,
+            .menu-toggle {
+                min-height: 44px;
+                min-width: 44px;
             }
         }
 
+        /* Mobile pequeño */
         @media (max-width: 480px) {
+            html {
+                font-size: 13px;
+            }
+
+            nav {
+                padding: 0.75rem 3%;
+            }
+
+            .logo-image {
+                height: 40px;
+            }
+
+            section {
+                padding: 3rem 3%;
+            }
+
+            .story-images {
+                height: 300px;
+            }
+
+            .hero-title {
+                letter-spacing: 0.1em;
+            }
+        }
+
+        /* Modo landscape en móviles */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .hero {
+                min-height: 100vh;
+            }
+
             .hero-title {
                 font-size: 3rem;
             }
 
-            section {
-                padding: 5rem 5%;
+            .scroll-indicator {
+                display: none;
             }
+        }
 
-            .logo-image {
-                height: 35px;
+        /* Mejoras de accesibilidad */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
+        }
 
-            .logo-text {
-                font-size: 1.5rem;
-                letter-spacing: 2px;
-            }
-
-            nav.scrolled .logo-image {
-                height: 30px;
-            }
-
-            nav.scrolled .logo-text {
-                font-size: 1.3rem;
-            }
+        /* Modo oscuro del sistema */
+        @media (prefers-color-scheme: dark) {
+            /* El diseño ya es oscuro, pero podemos ajustar algunos detalles */
         }
     </style>
 </head>
@@ -1907,26 +1903,24 @@
                 parallax.style.backgroundPositionY = scrolled * 0.5 + 'px';
             }
         });
-    document.addEventListener("DOMContentLoaded", function () {
-        const loader = document.querySelector(".loading-screen");
-        const hero = document.querySelector(".hero");
-        const minDisplayTime = 2500;
 
-        const startTime = Date.now();
+        document.addEventListener("DOMContentLoaded", function () {
+            const loader = document.querySelector(".loading-screen");
+            const hero = document.querySelector(".hero");
+            const minDisplayTime = 2500;
 
-        window.addEventListener("load", function () {
-            const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(minDisplayTime - elapsedTime, 0);
+            const startTime = Date.now();
 
-            setTimeout(() => {
-                loader.classList.add("hidden");
-                hero.classList.add("show");
-            }, remainingTime);
+            window.addEventListener("load", function () {
+                const elapsedTime = Date.now() - startTime;
+                const remainingTime = Math.max(minDisplayTime - elapsedTime, 0);
+
+                setTimeout(() => {
+                    loader.classList.add("hidden");
+                    hero.classList.add("show");
+                }, remainingTime);
+            });
         });
-    });
-
-
-
     </script>
 </body>
 </html>
